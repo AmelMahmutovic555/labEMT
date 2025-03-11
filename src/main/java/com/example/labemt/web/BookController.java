@@ -30,10 +30,10 @@ public class BookController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Book> save(@RequestBody Book book) {
+    public ResponseEntity<Book> save(@RequestBody BookDto book) {
         return bookService.save(book)
-                .map(book1 -> ResponseEntity.status(HttpStatus.CREATED).body(book1))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/edit/{id}")

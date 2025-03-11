@@ -51,10 +51,9 @@ public class BookServiceImpl implements BookService {
 //    }
 
     @Override
-    public Optional<Book> save(Book book) {
-        // Check if the Author is not null and already exists
-        if (book.getAuthor() != null && authorService.findById(book.getAuthor().getId()).isPresent()) {
-            return Optional.of(bookRepository.save(book));
+    public Optional<Book> save(BookDto book) {
+        if (book.getAuthor() != null && authorService.findById(book.getAuthor()).isPresent()){
+            return Optional.of(bookRepository.save(new Book(book.getName(), book.getCategory(), authorService.findById(book.getAuthor()).get(), book.getAvailableCopies())));
         }
         return Optional.empty();
     }
