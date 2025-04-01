@@ -1,4 +1,4 @@
-package com.example.labemt.model;
+package com.example.labemt.model.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

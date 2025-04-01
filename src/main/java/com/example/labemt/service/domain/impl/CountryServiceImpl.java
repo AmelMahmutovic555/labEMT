@@ -1,8 +1,8 @@
-package com.example.labemt.service.impl;
+package com.example.labemt.service.domain.impl;
 
-import com.example.labemt.model.Country;
+import com.example.labemt.model.domain.Country;
 import com.example.labemt.repository.CountryRepository;
-import com.example.labemt.service.CountryService;
+import com.example.labemt.service.domain.CountryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

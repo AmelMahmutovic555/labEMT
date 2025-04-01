@@ -1,9 +1,9 @@
 package com.example.labemt.repository;
 
-import com.example.labemt.model.domain.Author;
+import com.example.labemt.model.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+public interface FoodRepository extends JpaRepository<Food, Long> {
 }

@@ -1,8 +1,7 @@
-package com.example.labemt.model;
+package com.example.labemt.model.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data

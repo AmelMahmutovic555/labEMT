@@ -1,6 +1,6 @@
-package com.example.labemt.service;
+package com.example.labemt.service.domain;
 
-import com.example.labemt.model.Country;
+import com.example.labemt.model.domain.Country;
 
 import java.util.List;
 import java.util.Optional;

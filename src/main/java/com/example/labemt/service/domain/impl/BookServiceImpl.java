@@ -1,17 +1,14 @@
-package com.example.labemt.service.impl;
+package com.example.labemt.service.domain.impl;
 
-import com.example.labemt.model.Author;
-import com.example.labemt.model.Book;
-import com.example.labemt.model.dto.BookDto;
+import com.example.labemt.model.domain.Author;
+import com.example.labemt.model.domain.Book;
 import com.example.labemt.repository.AuthorRepository;
 import com.example.labemt.repository.BookRepository;
-import com.example.labemt.service.AuthorService;
-import com.example.labemt.service.BookService;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.labemt.service.domain.AuthorService;
+import com.example.labemt.service.domain.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,27 +32,9 @@ public class BookServiceImpl implements BookService {
         return Optional.of(bookRepository.findById(id)).orElse(null);
     }
 
-//    @Override
-//    public Optional<Book> save(Book book) {
-//        Author author = authorService.findById(book.getAuthor().getId()).orElse(null);
-//        authorService.save(author);
-//        return Optional.of(bookRepository.save(book));
-//    }
-
-//    @Override
-//    public Optional<Book> save(Book book) {
-//        if(book.getAuthor() != null && authorService.findById(book.getAuthor()).isPresent()){
-//            return Optional.of(bookRepository.save(new Book(book.getName(), book.getCategory(), authorService.findById(book.getAuthor()).get(), book.getAvailableCopies())));
-//        }
-//        return Optional.empty();
-//    }
-
     @Override
-    public Optional<Book> save(BookDto book) {
-        if (book.getAuthor() != null && authorService.findById(book.getAuthor()).isPresent()){
-            return Optional.of(bookRepository.save(new Book(book.getName(), book.getCategory(), authorService.findById(book.getAuthor()).get(), book.getAvailableCopies())));
-        }
-        return Optional.empty();
+    public Optional<Book> save(Book book) {
+        return Optional.of(bookRepository.save(book));
     }
 
     @Override
@@ -85,4 +64,5 @@ public class BookServiceImpl implements BookService {
     public void delete(Long id) {
         bookRepository.deleteById(id);
     }
+
 }
