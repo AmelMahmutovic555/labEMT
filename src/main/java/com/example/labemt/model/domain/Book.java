@@ -1,5 +1,6 @@
 package com.example.labemt.model.domain;
 
+import com.example.labemt.model.enumerations.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;

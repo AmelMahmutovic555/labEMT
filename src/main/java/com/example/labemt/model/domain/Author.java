@@ -2,6 +2,9 @@ package com.example.labemt.model.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
@@ -13,8 +16,27 @@ public class Author {
     private String name;
     private String surname;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Country country;
+
+    // Lifecycle callback for pre-update
+    @PreUpdate
+    public void onUpdate() {
+        // You can add logic here to handle the update, e.g., change the country reference to null
+        if (this.country != null) {
+            // Ensure no violation happens if you update a country referenced by an author
+            // You can add more complex logic to handle the update of the country reference
+        }
+    }
+
+    @PreRemove
+    public void onRemove() {
+        // Handle cleanup if the author is removed due to country deletion
+        if (this.country != null) {
+            this.country = null; // or update logic
+        }
+    }
 
     public Author() {
     }

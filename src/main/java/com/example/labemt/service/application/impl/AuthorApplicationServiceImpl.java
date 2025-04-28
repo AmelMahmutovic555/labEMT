@@ -29,6 +29,11 @@ public class AuthorApplicationServiceImpl implements AuthorApplicationService {
     }
 
     @Override
+    public Optional<CreateAuthorDto> findById(Long id) {
+        return authorService.findById(id).map(CreateAuthorDto::from);
+    }
+
+    @Override
     public Optional<CreateAuthorDto> create(CreateAuthorDto createAuthorDto) {
         Country country = countryService.findById(createAuthorDto.country()).orElse(null);
         return authorService.save(createAuthorDto.toAuthor(country)).map(CreateAuthorDto::from);

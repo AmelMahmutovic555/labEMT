@@ -1,41 +1,76 @@
-//package com.example.labemt.web;
-//
-//import com.example.labemt.model.dto.CreateUserDto;
-//import com.example.labemt.model.dto.DisplayUserDto;
-//import com.example.labemt.model.dto.LoginUserDto;
-//import com.example.labemt.service.application.UserApplicationService;
-//import jakarta.servlet.http.HttpServletRequest;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import javax.management.InvalidApplicationException;
-//import javax.management.InvalidAttributeValueException;
-//
-//@RestController
-//@RequestMapping("/api/users")
-//public class UserController {
-//    private final UserApplicationService userApplicationService;
-//
-//    public UserController(UserApplicationService userApplicationService) {
-//        this.userApplicationService = userApplicationService;
-//    }
-//
-//    @PostMapping("/register")
-//    public ResponseEntity<DisplayUserDto> register(@RequestBody CreateUserDto createUserDto){
-//        return userApplicationService.register(createUserDto).map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
-//    }
-//
-//    @PostMapping("/login")
-//    public ResponseEntity<DisplayUserDto> login(HttpServletRequest request){
-//        try{
-//            DisplayUserDto displayUserDto = userApplicationService.login(new LoginUserDto(request.getParameter("username"), request.getParameter("password"))).orElse(null);
-//            request.getSession().setAttribute("user", displayUserDto.toUser());
-//            return ResponseEntity.ok(displayUserDto);
-//        } catch (RuntimeException runtimeException) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//}
+package com.example.labemt.web;
+
+import com.example.labemt.model.domain.User;
+import com.example.labemt.model.dto.CreateUserDto;
+import com.example.labemt.model.dto.DisplayUserDto;
+import com.example.labemt.model.dto.LoginResponseDto;
+import com.example.labemt.model.dto.LoginUserDto;
+import com.example.labemt.model.exceptions.InvalidArgumentsException;
+import com.example.labemt.model.exceptions.InvalidUserCredentialsException;
+import com.example.labemt.model.exceptions.PasswordsDoNotMatchException;
+import com.example.labemt.service.application.UserApplicationService;
+import com.example.labemt.service.domain.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    private final UserApplicationService userApplicationService;
+    private final UserService userService;
+
+    public UserController(UserApplicationService userApplicationService, UserService userService) {
+        this.userApplicationService = userApplicationService;
+        this.userService = userService;
+    }
+
+    @Operation(summary = "List all users", description = "Lists all users")
+    @GetMapping
+    public List<User> findAll(){
+        return userService.listAll();
+    }
+
+    @Operation(summary = "Register a new user", description = "Creates a new user account")
+    @ApiResponses(
+            value = {@ApiResponse(
+                    responseCode = "200",
+                    description = "User registered successfully"
+            ), @ApiResponse(
+                    responseCode = "400", description = "Invalid input or passwords do not match"
+            )}
+    )
+    @PostMapping("/register")
+    public ResponseEntity<DisplayUserDto> register(@RequestBody CreateUserDto createUserDto) {
+        try {
+            return userApplicationService.register(createUserDto)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (InvalidArgumentsException | PasswordsDoNotMatchException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Operation(summary = "User login", description = "Authenticates a user and generates a JWT")
+    @ApiResponses(
+            value = {@ApiResponse(
+                    responseCode = "200",
+                    description = "User authenticated successfully"
+            ), @ApiResponse(responseCode = "404", description = "Invalid username or password")}
+    )
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginUserDto loginUserDto) {
+        try {
+            return userApplicationService.login(loginUserDto)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(InvalidUserCredentialsException::new);
+        } catch (InvalidUserCredentialsException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+}

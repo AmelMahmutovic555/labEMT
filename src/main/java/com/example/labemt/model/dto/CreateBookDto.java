@@ -2,7 +2,7 @@ package com.example.labemt.model.dto;
 
 import com.example.labemt.model.domain.Author;
 import com.example.labemt.model.domain.Book;
-import com.example.labemt.model.domain.Category;
+import com.example.labemt.model.enumerations.Category;
 
 import java.util.List;
 import java.util.stream.Collectors;

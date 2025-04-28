@@ -1,4 +1,4 @@
-package com.example.labemt.model.domain;
+package com.example.labemt.model.enumerations;
 
 public enum Category {
     NOVEL,

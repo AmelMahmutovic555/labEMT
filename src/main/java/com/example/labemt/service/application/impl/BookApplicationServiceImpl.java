@@ -26,6 +26,11 @@ public class BookApplicationServiceImpl implements BookApplicationService {
     }
 
     @Override
+    public Optional<CreateBookDto> findById(Long id) {
+        return bookService.findById(id).map(CreateBookDto::from);
+    }
+
+    @Override
     public Optional<CreateBookDto> create(CreateBookDto createBookDto) {
         Author author = authorService.findById(createBookDto.author()).orElse(null);
         return bookService.save(createBookDto.toBook(author)).map(CreateBookDto::from);

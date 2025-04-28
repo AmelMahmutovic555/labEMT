@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface AuthorApplicationService {
     List<CreateAuthorDto> listAll();
+    Optional<CreateAuthorDto> findById(Long id);
     Optional<CreateAuthorDto> create(CreateAuthorDto createAuthorDto);
     Optional<CreateAuthorDto> update(Long id, CreateAuthorDto createAuthorDto);
 }

@@ -2,6 +2,7 @@ package com.example.labemt.web;
 
 import com.example.labemt.model.domain.Author;
 import com.example.labemt.model.dto.CreateAuthorDto;
+import com.example.labemt.model.projections.AuthorProjection;
 import com.example.labemt.service.application.AuthorApplicationService;
 import com.example.labemt.service.domain.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +31,8 @@ public class AuthorController {
 
     @Operation(summary = "Find an author by ID", description = "Retrieves an author by their unique identifier")
     @GetMapping("/{id}")
-    public ResponseEntity<Author> findById(@PathVariable Long id) {
-        return authorService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CreateAuthorDto> findById(@PathVariable Long id) {
+        return authorApplicationService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Create a new author", description = "Creates a new author and returns the created author data")
@@ -58,5 +59,10 @@ public class AuthorController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/names")
+    public List<AuthorProjection> listByNameAndSurname(){
+        return authorService.listAllByNameAndSurname();
     }
 }

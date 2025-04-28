@@ -2,6 +2,7 @@ package com.example.labemt.service.domain.impl;
 
 import com.example.labemt.model.domain.Author;
 import com.example.labemt.model.domain.Country;
+import com.example.labemt.model.projections.AuthorProjection;
 import com.example.labemt.repository.AuthorRepository;
 import com.example.labemt.service.domain.AuthorService;
 import com.example.labemt.service.domain.CountryService;
@@ -66,5 +67,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void delete(Long id) {
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    public List<AuthorProjection> listAllByNameAndSurname() {
+        return authorRepository.listAllAuthorsByNameAndSurname();
     }
 }

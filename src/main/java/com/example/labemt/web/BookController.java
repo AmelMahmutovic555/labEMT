@@ -30,8 +30,8 @@ public class BookController {
 
     @Operation(summary = "Find a book by ID", description = "Retrieves a book by its unique identifier")
     @GetMapping("/{id}")
-    public ResponseEntity<Book> findById(@PathVariable Long id) {
-        return bookService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CreateBookDto> findById(@PathVariable Long id) {
+        return bookApplicationService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Create a new book", description = "Creates a new book and returns the created book data")

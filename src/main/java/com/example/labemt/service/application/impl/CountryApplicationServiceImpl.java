@@ -23,6 +23,11 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
     }
 
     @Override
+    public Optional<DisplayCountryDto> findById(Long id) {
+        return countryService.findById(id).map(DisplayCountryDto::from);
+    }
+
+    @Override
     public Optional<DisplayCountryDto> create(CreateCountryDto createCountryDto) {
         return countryService.save(createCountryDto.toCountry()).map(DisplayCountryDto::from);
     }
@@ -30,5 +35,10 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
     @Override
     public Optional<DisplayCountryDto> update(Long id, CreateCountryDto createCountryDto) {
         return countryService.edit(id, createCountryDto.toCountry()).map(DisplayCountryDto::from);
+    }
+
+    @Override
+    public void delete(Long id) {
+        countryService.delete(id);
     }
 }
